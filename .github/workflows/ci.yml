@@ -8,16 +8,24 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY: gchr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.26"
 
@@ -34,5 +42,22 @@ jobs:
       - name: Build application
         run: go build -o server ./cmd/api
 
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Docker image
         run: docker build -t cicd-go-k8s:${{ github.sha }} .
+
+      - name: Build and push Docker image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/bu3lii/cicd-go-k8s:${{ github.sha }}
+            ghcr.io/bu3lii/cicd-go-k8s:latest
