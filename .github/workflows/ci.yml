@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:
@@ -61,3 +61,15 @@ jobs:
           tags: |
             ghcr.io/bu3lii/cicd-go-k8s:${{ github.sha }}
             ghcr.io/bu3lii/cicd-go-k8s:latest
+
+      - name: Update Helm image tag
+        if: github.event_name == 'push'
+        run: |
+          sed -i "s/tagL .*/tag: ${{ github.sha }}/" helm/go-api/values.yaml
+
+          git config user.name "github-actions[bot]""
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add helm/go-api/values.yaml
+          git commit -m "chore: deploy ${{github.sha}} [skip ci]"
+          git push
