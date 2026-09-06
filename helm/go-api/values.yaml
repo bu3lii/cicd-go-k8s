@@ -3,7 +3,7 @@ replicaCount: 2
 
 image:
   repository: ghcr.io/bu3lii/cicd-go-k8s
-  tag: 75757a4a1aee4cfab7499615cc15a033deba2a50
+  tag: 31956b768393f46a9d6b039a5f6256b82f8f6128
   pullPolicy: Always
 
 service:
