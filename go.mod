@@ -1,0 +1,3 @@
+module cicd-go-k8s
+
+go 1.26.5

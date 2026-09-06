@@ -1,0 +1,25 @@
+replicaCount: 2
+
+
+image:
+  repository: cicd-go-k8s
+  tag: local
+  pullPolicy: Never
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+containerPort: 8080
+
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+  readiness:
+    path: /ready
+    initialDelaySeconds: 2
+    periodSeconds: 5
