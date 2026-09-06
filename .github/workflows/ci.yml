@@ -52,6 +52,15 @@ jobs:
       - name: Build Docker image
         run: docker build -t cicd-go-k8s:${{ github.sha }} .
 
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: cicd-go-k8s:${{github.sha}}
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+
       - name: Build and push Docker image
         if: github.event_name == 'push'
         uses: docker/build-push-action@v6
