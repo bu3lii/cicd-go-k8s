@@ -65,9 +65,9 @@ jobs:
       - name: Update Helm image tag
         if: github.event_name == 'push'
         run: |
-          sed -i "s/tagL .*/tag: ${{ github.sha }}/" helm/go-api/values.yaml
+          sed -i "s/tag: .*/tag: ${{ github.sha }}/" helm/go-api/values.yaml
 
-          git config user.name "github-actions[bot]""
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add helm/go-api/values.yaml
