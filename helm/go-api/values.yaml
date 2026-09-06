@@ -2,9 +2,9 @@ replicaCount: 2
 
 
 image:
-  repository: cicd-go-k8s
-  tag: local
-  pullPolicy: Never
+  repository: ghcr.io/bu3lii/cicd-go-k8s
+  tag: latest
+  pullPolicy: Always
 
 service:
   type: ClusterIP
